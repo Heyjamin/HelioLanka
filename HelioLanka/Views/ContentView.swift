@@ -6,56 +6,36 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
+       
+        ZStack {
+            HelioBackground()
+            
+            VStack(spacing:16){
+                Text("HelioLanka")
+                    .font(.system(size:40, weight:.bold, design:.rounded))
+                    .foregroundStyle(HelioTheme.navy)
+                
+                Text ("Your rooftop solar, elevated.")
+                    .font(.title3)
+                    .foregroundStyle(HelioTheme.inkMuted)
+                    .multilineTextAlignment(.center)
+                
+                Text("Phase 01 complete")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(HelioTheme.ocean)
+                    .padding(.top,24)
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
+            .padding(HelioTheme.screenPadding)
         }
+        
     }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
-    }
+    
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }
