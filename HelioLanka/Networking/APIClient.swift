@@ -55,19 +55,33 @@ actor APIClient{
     private var accessToken: String?
     private var refreshToken: String?
     
-    init(baseURL: URL = AppEnvironment.apiBaseURL){
+    private let tokenStore: TokenStore
+    
+    init(baseURL: URL = AppEnvironment.apiBaseURL,
+         tokenStore: TokenStore = .shared
+    ){
         self.baseURL = baseURL
+        self.tokenStore = tokenStore
         self.session = URLSession(configuration: .default)
+        if let pair = tokenStore.load() {
+            self.accessToken = pair.access
+            self.refreshToken = pair.refresh
+        }
     }
     
     func setTokens(access: String?, refresh: String?){
         accessToken = access
         refreshToken = refresh
+        
+        if let access, let refresh {
+            tokenStore.save(access: access, refresh: refresh)
+        }else{
+            tokenStore.clear()
+        }
     }
     
     func clearTokens(){
-        accessToken = nil
-        refreshToken = nil
+        setTokens(access: nil, refresh: nil)
     }
     
     func request<T: Decodable>(
@@ -113,7 +127,8 @@ actor APIClient{
         method: HTTPMethod = .get,
         body: (any Encodable)? = nil,
         auth: Bool = true,
-        query: [URLQueryItem] = []
+        query: [URLQueryItem] = [],
+        retried: Bool = false
     ) async throws -> Data {
         let urlString =
         baseURL.absoluteString.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
@@ -159,6 +174,18 @@ actor APIClient{
             return Data()
         }
         
+        if http.statusCode == 401, auth, !retried, let refresh = refreshToken {
+            try await refreshAccess(using: refresh)
+            return try await rawRequest(
+                path,
+                method: method,
+                body: body,
+                auth: auth,
+                query: query,
+                retried: true
+            )
+        }
+        
         if !(200..<300).contains(http.statusCode){
             let parsed = try? JSONDecoder().decode(APIErrorBody.self, from: data)
             let serverMessage = [parsed?.message, parsed?.description]
@@ -185,9 +212,25 @@ actor APIClient{
         return data
         
     }
-}
     
-    /// Helps encode `any Encodable` request bodies.
+    private func refreshAccess (using refresh: String) async throws {
+        struct Body: Encodable {let refreshToken: String}
+        struct Tokens: Decodable {
+            let accessToken: String
+            let refreshToken: String
+        }
+        let tokens: Tokens = try await request (
+            "/api/v1/auth/refresh",
+            method: .post,
+            body: Body(refreshToken: refresh),
+            auth: false
+        )
+        setTokens(access: tokens.accessToken, refresh: tokens.refreshToken)
+    }
+    
+}
+
+/// Helps encode `any Encodable` request bodies.
     private struct AnyEncodable: Encodable {
         private let encodeFunc: (Encoder) throws -> Void
         
@@ -199,4 +242,5 @@ actor APIClient{
             try encodeFunc(encoder)
         }
     }
+    
 

@@ -9,102 +9,122 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var statusText = "Checking API.."
-    @State private var isOK = false
+    @Environment(SessionManager.self) private var session
     
     var body: some View {
+        @Bindable var session = session
         
         ZStack {
             HelioBackground()
             
-            VStack(spacing:16){
-                Text("HelioLanka")
-                    .font(.system(size:40, weight:.bold, design:.rounded))
-                    .foregroundStyle(HelioTheme.navy)
-                
-                Text ("Your rooftop solar, elevated.")
-                    .font(.title3)
-                    .foregroundStyle(HelioTheme.inkMuted)
-                    .multilineTextAlignment(.center)
-                
-                VStack(alignment: .leading, spacing: 8){
-                    Text ("API base")
-                        .font(.caption.weight(.semibold))
+            ScrollView{
+                VStack(spacing:16){
+                    Text("HelioLanka")
+                        .font(.system(size:34, weight:.bold, design:.rounded))
+                        .foregroundStyle(HelioTheme.navy)
+                    
+                    Text ("Phase 03 - Auth services")
+                        .font(.subheadline.weight(.semibold))
                         .foregroundStyle(HelioTheme.ocean)
                     
-                    Text(AppEnvironment.apiBaseURL.absoluteString)
-                        .font(.footnote.monospaced())
-                        .foregroundStyle(HelioTheme.navy)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.7)
+                    phaseCard
                     
-                    Text(statusText)
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(isOK ? HelioTheme.leaf : HelioTheme.navy)
-                        .padding(.top, 8)
+                    if let err = session.lastError {
+                        Text(err)
+                            .font(.footnote)
+                            .foregroundStyle(.red)
+                            .padding(12)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.red.opacity(0.08), in:RoundedRectangle(cornerRadius: 12))
+                    }
+                    
+                    switch session.phase{
+                    case .launching:
+                        ProgressView("Starting...")
+                        
+                    case .unauthenticated:
+                        TextField("Username", text: $session.debugUsername)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                            .padding(12)
+                            .background(Color.white.opacity(0.75), in: RoundedRectangle(cornerRadius: 12))
+                        SecureField("Password", text: $session.debugPassword)
+                            .padding(12)
+                            .background(Color.white.opacity(0.75), in: RoundedRectangle(cornerRadius: 12))
+                        Button("1) Login → OTP challenge"){
+                            Task { await session.debugLogin()}
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(HelioTheme.ocean)
+                        
+                    case .needsOtp(let challenge, let hint):
+                        Text("User: \(hint)")
+                            .foregroundStyle(HelioTheme.navy)
+                        Text("OTP sent to \(challenge.emailMasked)")
+                            .foregroundStyle(HelioTheme.inkMuted)
+                        Text(challenge.message)
+                            .font(.footnote)
+                            .foregroundStyle(HelioTheme.inkMuted)
+                        
+                        TextField("6-Digit OTP", text: $session.debugOtp)
+                            .keyboardType(.numberPad)
+                            .padding(12)
+                            .background(Color.white.opacity(0.75), in: RoundedRectangle(cornerRadius:12))
+                        
+                        Button ("2) Verigy OTP") {
+                            Task {await session.debugVerifyOtp()}
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(HelioTheme.leaf)
+                        
+                        Button("Back"){
+                            Task {await session.signOut()}
+                        }
+                        
+                    case .customer(let user):
+                        Text ("Signed in as \(user.displayName)")
+                            .font(.headline)
+                            .foregroundStyle(HelioTheme.navy)
+                        Text("Role: \(user.role)")
+                        Text("Meters: \(user.allMeters.count)")
+                        Text("Selected meter: \(session.selectedMeterId.isEmpty ? "-" : session.selectedMeterId)")
+                        Text("Phase 03 colplete ✅")
+                            .foregroundStyle(HelioTheme.leaf)
+                            .padding(.top, 8)
+                        
+                        Button("Sign out"){
+                            Task {await session.signOut() }
+                        }
+                    case .staffBlocked(let user):
+                        Text("Staff account (\(user.role)) - use the web admin.")
+                            .foregroundStyle(HelioTheme.navy)
+                        Button("Sign out"){
+                            Task { await session.signOut()}
+                        }
+                    }
                 }
-                .padding(HelioTheme.cardPadding)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    RoundedRectangle(cornerRadius: HelioTheme.cardRadius, style: .continuous)
-                        .fill(Color.white.opacity(0.72))
-                )
-                .padding(.top, 24)
-                
-                Button ("Retry connection"){
-                    Task { await checkAPI() }
-                }
-                .font(.headline)
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(HelioTheme.ctaGradient)
-                .clipShape(RoundedRectangle(cornerRadius: HelioTheme.controlRadius, style: .continuous))
+                .padding(HelioTheme.screenPadding)
             }
-            .padding(HelioTheme.screenPadding)
-        }
-        .task {
-            await checkAPI()
         }
     }
     
-    @MainActor
-    private func checkAPI() async {
-        statusText = "Checking API.."
-        isOK = false
-        do {
-            // Public health check - no auth.
-            let _: HealthResponse = try await APIClient.shared.request(
-                "/health",
-                method: .get,
-                auth: false
-            )
-            statusText = "API reachable - Phase 02 complete"
-            isOK = true
-        } catch {
-            // If /health shape differes, still prove transport worksvia raw status.
-            do {
-                let data = try await APIClient.shared.rawRequest(
-                    "/health",
-                    method: .get,
-                    auth: false
-                )
-                let preview = String(data: data, encoding: .utf8) ?? "(binary)"
-                statusText = "API responded (\(preview.prefix(80))) - Phase 02 complete"
-                isOK = true
-            } catch {
-                statusText = error.localizedDescription
-                isOK = false
-            }
+    private var phaseCard: some View {
+        Text(phaseLabel)
+            .font(.footnote.monospaced())
+            .foregroundStyle(HelioTheme.navy)
+            .padding(12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.white.opacity (0.7), in: RoundedRectangle(cornerRadius: 12))
+    }
+    
+    private var phaseLabel: String {
+        switch session.phase{
+        case .launching: return "phase = launching"
+        case .unauthenticated: return " phase = unauthenticated"
+        case .needsOtp: return "Phase = needsOtp"
+        case .customer: return "phase = customer"
+        case .staffBlocked: return "phase = staffBlocked"
         }
     }
 }
 
-/// Minimal decode target for health JSON.
-private struct HealthResponse: Decodable{
-    var status: String?
-}
-
-#Preview {
-    ContentView()
-}

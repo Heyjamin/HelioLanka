@@ -19,6 +19,6 @@ enum AppEnvironment {
         }
         #endif
         // Production / UAT API
-        return URL (string: "https://sl-aced683b8da34d50806d14bcab9d5a82.ecs.ap-southeast-1.on.aws")!
+        return URL (string: "https://he-907259e87ef04b90924f651d03e9cf03.ecs.ap-southeast-1.on.aws")!
     }
 }
