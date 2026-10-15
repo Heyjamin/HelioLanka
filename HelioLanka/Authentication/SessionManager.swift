@@ -23,10 +23,10 @@ final class SessionManager{
     var selectedMeterId: String = ""
     var lastError: String?
     
-    /// Temporary debug fields for Phase 03 (replaced by proper forms in Phase 04).
-    var debugUsername = "customer"
-    var debugPassword = "Customer@12345"
-    var debugOtp = ""
+    //    Temporary debug fields for Phase 03 (replaced by proper forms in Phase 04).
+    //    var debugUsername = "customer"
+    //    var debugPassword = "Customer@12345"
+    //    var debugOtp = ""
     
     let api: APIClient
     let auth: AuthService
@@ -68,41 +68,41 @@ final class SessionManager{
         phase = .needsOtp(challenge: challenge, usernameHint: usernameHint)
     }
     
-    func debugLogin() async {
-        lastError = nil
-        do{
-            let user = debugUsername.trimmingCharacters(in: .whitespacesAndNewlines)
-            let challenge = try await auth.login(usernameOrEmail: user, password: debugPassword)
-            beginOtp(challenge: challenge, usernameHint: user)
-        }catch{
-            lastError = error.localizedDescription
-            phase = .unauthenticated
-        }
-    }
+//    func debugLogin() async {
+//        lastError = nil
+//        do{
+//            let user = debugUsername.trimmingCharacters(in: .whitespacesAndNewlines)
+//            let challenge = try await auth.login(usernameOrEmail: user, password: debugPassword)
+//            beginOtp(challenge: challenge, usernameHint: user)
+//        }catch{
+//            lastError = error.localizedDescription
+//            phase = .unauthenticated
+//        }
+//    }
     
-    func debugVerifyOtp() async {
-        lastError = nil
-        guard case .needsOtp(let challenge, _) = phase else {
-            return
-        }
-        do {
-            _ = try await auth.verifyOtp(
-                challengeCode: challenge.challengeCode,
-                otp: debugOtp.trimmingCharacters(in: .whitespacesAndNewlines)
-            )
-            let user = try await auth.me()
-            apply (user: user)
-            
-        } catch{
-            lastError = error.localizedDescription
-        }
-
-    }
+//    func debugVerifyOtp() async {
+//        lastError = nil
+//        guard case .needsOtp(let challenge, _) = phase else {
+//            return
+//        }
+//        do {
+//            _ = try await auth.verifyOtp(
+//                challengeCode: challenge.challengeCode,
+//                otp: debugOtp.trimmingCharacters(in: .whitespacesAndNewlines)
+//            )
+//            let user = try await auth.me()
+//            apply (user: user)
+//            
+//        } catch{
+//            lastError = error.localizedDescription
+//        }
+//
+//    }
     
     func signOut() async {
         try? await auth.logout()
         selectedMeterId = ""
-        debugOtp = ""
+        // debugOtp = ""
         phase = .unauthenticated
     }
     
