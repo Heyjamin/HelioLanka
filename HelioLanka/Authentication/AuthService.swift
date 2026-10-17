@@ -16,7 +16,7 @@ actor AuthService {
     
     func register(_ body: RegisterBody) async throws -> UserMe {
         try await client.request(
-            "/api/vq/auth/register",
+            "/api/v1/auth/register",
             method: .post,
             body: body,
             auth: false

@@ -21,35 +21,37 @@ struct ContentView: View {
                 LoginView(session: session)
             case .needsOtp(let challenge, _):
                 OtpView(session: session, challenge: challenge)
+//            case .customer(let user):
+//                signedIn(user)
             case .customer(let user):
-                signedIn(user)
+                CustomerTabShell(user: user, session: session)
             case .staffBlocked(let user):
                 staffBlocked(user)
             }
         }
     }
     
-    private func signedIn(_ user: UserMe) -> some View {
-        VStack(alignment: .leading, spacing: 12){
-            Text("Signed in")
-                .font(.system(size:28, weight: .bold, design: .rounded))
-                .foregroundStyle(HelioTheme.navy)
-            Text(user.displayName)
-                .font(.title3)
-            Text(user.email)
-                .foregroundStyle(HelioTheme.inkMuted)
-            Text("Meters: \(user.allMeters.count)")
-            Text("Phase 4 complete")
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(HelioTheme.leaf)
-            Button("sign out"){
-                Task {await session.signOut() }
-            }
-            .buttonStyle(.bordered)
-        }
-        .padding(HelioTheme.screenPadding)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-    }
+//    private func signedIn(_ user: UserMe) -> some View {
+//        VStack(alignment: .leading, spacing: 12){
+//            Text("Signed in")
+//                .font(.system(size:28, weight: .bold, design: .rounded))
+//                .foregroundStyle(HelioTheme.navy)
+//            Text(user.displayName)
+//                .font(.title3)
+//            Text(user.email)
+//                .foregroundStyle(HelioTheme.inkMuted)
+//            Text("Meters: \(user.allMeters.count)")
+//            Text("Phase 4 complete")
+//                .font(.footnote.weight(.semibold))
+//                .foregroundStyle(HelioTheme.leaf)
+//            Button("sign out"){
+//                Task {await session.signOut() }
+//            }
+//            .buttonStyle(.bordered)
+//        }
+//        .padding(HelioTheme.screenPadding)
+//        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+//    }
     
     private func staffBlocked(_ user: UserMe) -> some View {
         VStack(alignment: .leading, spacing: 12){
