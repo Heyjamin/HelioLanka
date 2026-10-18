@@ -81,7 +81,7 @@ struct HomeView: View {
                             Text(site.installation.installationName)
                                 .font(.headline)
                                 .foregroundStyle(HelioTheme.navy)
-                            Text("\(site.provicne.name) . \(site.district.name) . \(site.substation.name)")
+                            Text("\(site.province.name) . \(site.district.name) . \(site.substation.name)")
                                 .font(.subheadline)
                                 .foregroundStyle(HelioTheme.inkMuted)
                             if let address = site.installation.address, !address.isEmpty{
@@ -106,7 +106,7 @@ struct HomeView: View {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())],spacing: 12) {
                             stat("Live", HelioFormat.powerKw(site.lastReading?.instantaneousPowerKw))
                             stat("Last interval", HelioFormat.energyKwh(site.lastReading?.intervalExportKwh))
-                            stat("Cumilative", HelioFormat.energyKwh(site.lastReading?.cumilativeExportKwh))
+                            stat("Cumulative", HelioFormat.energyKwh(site.lastReading?.cumulativeExportKwh))
                             stat("Capacity", HelioFormat.currency(site.installation.tariffRate))
                         }
                     }

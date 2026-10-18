@@ -16,12 +16,7 @@ struct CustomerTabShell: View {
             HomeView(user: user, session: session)
             .tabItem { Label("Home", systemImage: "sun.max.fill")}
             
-            PlaceholderTab(
-                title:"History",
-                systemImage: "chart.xyaxis.line",
-                user: user,
-                session: session
-            )
+            HistoryView(session:session)
             .tabItem {Label("History", systemImage:"chart.xyaxis.line")}
             
             PlaceholderTab(

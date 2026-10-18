@@ -32,6 +32,7 @@ final class SessionManager{
     let auth: AuthService
     let installations: InstallationService
     let readings: ReadingService
+    let dailyStore: DailyGenerationStore
     
     init() {
         let client = APIClient()
@@ -39,6 +40,7 @@ final class SessionManager{
         self.auth = AuthService(client: client)
         self.installations = InstallationService(client: client)
         self.readings = ReadingService(client: client)
+        self.dailyStore = DailyGenerationStore()
     }
     
     func bootstrap() async {

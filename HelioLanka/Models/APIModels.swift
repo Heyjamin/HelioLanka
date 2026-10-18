@@ -110,7 +110,7 @@ struct Installation: Decodable, Identifiable, Hashable {
 
 struct ReadingBrief: Decodable {
     let timestampUtc: Date
-    let cumilativeExportKwh: Double
+    let cumulativeExportKwh: Double
     let intervalExportKwh: Double
     let instantaneousPowerKw: Double?
 }
@@ -124,7 +124,7 @@ struct InstallationComposite: Decodable {
     let installation: Installation
     let substation: NamedCode
     let district: NamedCode
-    let provicne: NamedCode
+    let province: NamedCode
     let lastReading: ReadingBrief?
 }
 
@@ -132,7 +132,7 @@ struct ReadingRow: Decodable, Identifiable {
     var id: String {"\(meterId ?? "")-\(timestampUtc.timeIntervalSince1970)"}
     let meterId: String?
     let timestampUtc: Date
-    let cumilativeKxportKwh: Double
+    let cumulativeExportKwh: Double
     let intervalExportKwh: Double
     let instantaneousPowerKw: Double?
 }
