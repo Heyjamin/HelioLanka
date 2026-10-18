@@ -30,11 +30,15 @@ final class SessionManager{
     
     let api: APIClient
     let auth: AuthService
+    let installations: InstallationService
+    let readings: ReadingService
     
     init() {
         let client = APIClient()
         self.api = client
         self.auth = AuthService(client: client)
+        self.installations = InstallationService(client: client)
+        self.readings = ReadingService(client: client)
     }
     
     func bootstrap() async {

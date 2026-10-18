@@ -13,12 +13,7 @@ struct CustomerTabShell: View {
     
     var body: some View{
         TabView {
-            PlaceholderTab(
-                title: "Home",
-                systemImage: "sun.max.fill",
-                user: user,
-                session: session
-            )
+            HomeView(user: user, session: session)
             .tabItem { Label("Home", systemImage: "sun.max.fill")}
             
             PlaceholderTab(

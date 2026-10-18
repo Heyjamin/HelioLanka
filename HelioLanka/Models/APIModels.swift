@@ -90,3 +90,56 @@ struct UserMe: Decodable, Equatable {
         return full.isEmpty ? username : full
     }
 }
+
+struct Installation: Decodable, Identifiable, Hashable {
+    var id: String {meterId}
+    let meterId: String
+    let accountNumber: String
+    let inverterId: String?
+    let substationCode: String
+    let installationName: String
+    let address: String?
+    let latitude: Double
+    let longitude: Double
+    let capacityKw: Double
+    let tariffRate: Double
+    let commissionedAtUtc: Date?
+    let status: String
+    
+}
+
+struct ReadingBrief: Decodable {
+    let timestampUtc: Date
+    let cumilativeExportKwh: Double
+    let intervalExportKwh: Double
+    let instantaneousPowerKw: Double?
+}
+
+struct NamedCode: Decodable {
+    let code: String
+    let name: String
+}
+
+struct InstallationComposite: Decodable {
+    let installation: Installation
+    let substation: NamedCode
+    let district: NamedCode
+    let provicne: NamedCode
+    let lastReading: ReadingBrief?
+}
+
+struct ReadingRow: Decodable, Identifiable {
+    var id: String {"\(meterId ?? "")-\(timestampUtc.timeIntervalSince1970)"}
+    let meterId: String?
+    let timestampUtc: Date
+    let cumilativeKxportKwh: Double
+    let intervalExportKwh: Double
+    let instantaneousPowerKw: Double?
+}
+
+struct PageResult<T: Decodable>: Decodable{
+    let data: [T]
+    let offset: Int?
+    let limit: Int?
+    let count: Int?
+}
