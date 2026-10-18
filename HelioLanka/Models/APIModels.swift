@@ -143,3 +143,19 @@ struct PageResult<T: Decodable>: Decodable{
     let limit: Int?
     let count: Int?
 }
+
+struct WeatherPoint: Decodable {
+    let timeUtc: Date
+    let temperatureC: Double?
+    let cloudCoverPercent: Double?
+    let shortwaveRadiationWm2:Double?
+    let precipitationMm: Double?
+}
+
+struct WeatherForecast: Decodable {
+    let meterId: String
+    let latitude: Double
+    let longitude: Double
+    let provider: String?
+    let hourly: [WeatherPoint]
+}

@@ -19,12 +19,7 @@ struct CustomerTabShell: View {
             HistoryView(session:session)
             .tabItem {Label("History", systemImage:"chart.xyaxis.line")}
             
-            PlaceholderTab(
-                title: "Weather",
-                systemImage: "cloud.sun.fill",
-                user: user,
-                session: session
-            )
+            WeatherView(session: session)
             .tabItem { Label("Weather", systemImage:"cloud.sun.fill")}
             
             PlaceholderTab(

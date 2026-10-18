@@ -68,3 +68,16 @@ actor ReadingService {
         return all
     }
 }
+
+actor WeatherService{
+    private let client: APIClient
+    
+    init(client: APIClient){
+        self.client = client
+    }
+    
+    func forecast(meterId: String) async throws -> WeatherForecast {
+        let encoded = meterId.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? meterId
+        return try await client.request("/api/v1/installations/\(encoded)/weather")
+    }
+}
