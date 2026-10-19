@@ -34,6 +34,7 @@ final class SessionManager{
     let readings: ReadingService
     let dailyStore: DailyGenerationStore
     let weather: WeatherService
+    let forecast: SolarForecastModel
     
     init() {
         let client = APIClient()
@@ -43,6 +44,7 @@ final class SessionManager{
         self.readings = ReadingService(client: client)
         self.dailyStore = DailyGenerationStore()
         self.weather = WeatherService(client: client)
+        self.forecast = SolarForecastModel()
     }
     
     func bootstrap() async {

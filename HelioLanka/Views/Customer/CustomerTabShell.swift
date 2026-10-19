@@ -22,12 +22,7 @@ struct CustomerTabShell: View {
             WeatherView(session: session)
             .tabItem { Label("Weather", systemImage:"cloud.sun.fill")}
             
-            PlaceholderTab(
-                title: "Earn",
-                systemImage: "banknote.fill",
-                user:user,
-                session: session
-            )
+            EarnView(session: session)
             .tabItem{Label("Earn", systemImage: "banknote.fill")}
             
             PlaceholderTab(
