@@ -91,17 +91,24 @@ struct HomeView: View {
                             }
                         }
                         
-                        HomeCard {
+                        VStack(alignment: .leading, spacing: 6) {
                             Text("Today")
                                 .font(.caption.weight(.semibold))
-                                .foregroundStyle(HelioTheme.inkMuted)
+                                .foregroundStyle(.white.opacity(0.72))
                             Text(HelioFormat.energyKwh(vm.todayExportKwh))
-                                .font(.system(size:36,weight: .bold, design: .rounded))
-                                .foregroundStyle(HelioTheme.navy)
-                            Text("Sum of today's intervals")
+                                .font(.system(size: 40, weight: .semibold, design: .rounded))
+                                .foregroundStyle(.white)
+                            Text("Sum of today’s intervals")
                                 .font(.caption)
-                                .foregroundStyle(HelioTheme.inkMuted)
+                                .foregroundStyle(.white.opacity(0.62))
                         }
+                        .padding(22)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(
+                            RoundedRectangle(cornerRadius: HelioTheme.cardRadius, style: .continuous)
+                                .fill(HelioTheme.heroGradient)
+                        )
+
                         
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())],spacing: 12) {
                             stat("Live", HelioFormat.powerKw(site.lastReading?.instantaneousPowerKw))
@@ -136,7 +143,7 @@ struct HomeView: View {
                     if let errorMessage = vm.errorMessage {
                         Text(errorMessage)
                             .font(.footnote)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(HelioTheme.danger)
                     }
                 }
                 .padding(HelioTheme.screenPadding)
@@ -171,9 +178,14 @@ private struct HomeCard<Content: View>: View {
         }
         .padding(HelioTheme.cardPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
+        .background{
             RoundedRectangle(cornerRadius: HelioTheme.cardRadius, style: .continuous)
-                .fill(.white.opacity(0.72))
-        )
+                .fill(HelioTheme.surface)
+                .shadow(color: HelioTheme.cardShadow, radius: 16, y:8)
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: HelioTheme.cardRadius, style: .continuous)
+                .strokeBorder(HelioTheme.hairline, lineWidth: 1)
+        }
     }
 }

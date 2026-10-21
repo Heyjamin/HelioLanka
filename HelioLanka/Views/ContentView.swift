@@ -94,7 +94,7 @@ struct ContentView: View {
 //                    if let err = session.lastError {
 //                        Text(err)
 //                            .font(.footnote)
-//                            .foregroundStyle(.red)
+//                            .foregroundStyle(HelioTheme.danger)
 //                            .padding(12)
 //                            .frame(maxWidth: .infinity, alignment: .leading)
 //                            .background(Color.red.opacity(0.08), in:RoundedRectangle(cornerRadius: 12))

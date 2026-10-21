@@ -85,7 +85,7 @@ struct HistoryView: View {
                                 x: .value("Day", item.date, unit: .day),
                                 y: .value("kWh", item.kwh)
                             )
-                            .foregroundStyle(HelioTheme.gold)
+                            .foregroundStyle(HelioTheme.leaf)
                             }
                             .frame(height: 220)
                         }
@@ -111,7 +111,7 @@ struct HistoryView: View {
                     if let errorMessage = vm.errorMessage{
                         Text(errorMessage)
                             .font(.footnote)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(HelioTheme.danger)
                     }
                 }
                 .padding(HelioTheme.screenPadding)
@@ -146,10 +146,15 @@ private struct HistoryCard<Content: View>: View {
         }
         .padding(HelioTheme.cardPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
+        .background{
             RoundedRectangle(cornerRadius: HelioTheme.cardRadius, style: .continuous)
-                .fill(.white.opacity(0.72))
-        )
+                .fill(HelioTheme.surface)
+                .shadow(color: HelioTheme.cardShadow, radius: 16, y:8)
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: HelioTheme.cardRadius, style: .continuous)
+                .strokeBorder(HelioTheme.hairline, lineWidth: 1)
+        }
     }
         
 }

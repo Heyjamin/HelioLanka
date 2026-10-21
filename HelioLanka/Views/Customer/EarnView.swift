@@ -63,7 +63,7 @@ struct EarnView: View {
                                     .foregroundStyle(HelioTheme.navy)
                                 Text(HelioFormat.currency(row.incomeLkr))
                                     .font(.subheadline.weight(.semibold))
-                                    .foregroundStyle(HelioTheme.navy)
+                                    .foregroundStyle(HelioTheme.gold)
                             }
                         }
                     }
@@ -88,7 +88,7 @@ struct EarnView: View {
                                 .foregroundStyle(HelioTheme.inkMuted)
                             Spacer()
                             Text(HelioFormat.currency(vm.forecastMonthIncome))
-                                .foregroundStyle(HelioTheme.navy)
+                                .foregroundStyle(HelioTheme.gold)
                         }
                         .font(.subheadline)
                         
@@ -97,7 +97,7 @@ struct EarnView: View {
                             x: .value("Day", day.day, unit: .day),
                             y: .value("kWh", day.predictedKwh)
                            )
-                           .foregroundStyle(HelioTheme.gold)
+                           .foregroundStyle(HelioTheme.leaf)
                         }
                         .frame(height: 160)
                     }
@@ -105,7 +105,7 @@ struct EarnView: View {
                     if let errorMessage = vm.errorMessage {
                         Text (errorMessage)
                             .font(.footnote)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(HelioTheme.danger)
                     }
                 }
                 .padding(HelioTheme.screenPadding)
@@ -144,9 +144,14 @@ private struct EarnCard<Content: View> : View {
         }
         .padding(HelioTheme.cardPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
+        .background{
             RoundedRectangle(cornerRadius: HelioTheme.cardRadius, style: .continuous)
-                .fill(.white.opacity(0.72))
-        )
+                .fill(HelioTheme.surface)
+                .shadow(color: HelioTheme.cardShadow, radius: 16, y:8)
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: HelioTheme.cardRadius, style: .continuous)
+                .strokeBorder(HelioTheme.hairline, lineWidth: 1)
+        }
     }
 }

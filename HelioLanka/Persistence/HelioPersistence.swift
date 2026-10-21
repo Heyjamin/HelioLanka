@@ -11,7 +11,7 @@ import CoreData
 enum HelioPersistence {
     static let container: NSPersistentContainer = {
         let model = NSManagedObjectModel()
-        model.entities = [dailyExportEntity()]
+        model.entities = [dailyExportEntity(), calendarNoteEntity()]
         
         let container = NSPersistentContainer(name: "HelioLanka", managedObjectModel: model)
         let description = NSPersistentStoreDescription()
@@ -50,6 +50,24 @@ enum HelioPersistence {
             attribute("meterId", .stringAttributeType),
             attribute("dayStart", .dateAttributeType),
             attribute("exportKwh", .doubleAttributeType),
+            attribute("updatedAt", .dateAttributeType),
+        ]
+        return entity
+    }
+    
+    private static func calendarNoteEntity() -> NSEntityDescription{
+        let entity = NSEntityDescription()
+        entity.name = "CalendarNoteRecord"
+        entity.managedObjectClassName = NSStringFromClass(NSManagedObject.self)
+        entity.properties = [
+            attribute("id", .stringAttributeType),
+            attribute("dayStart", .dateAttributeType),
+            attribute("title", .stringAttributeType),
+            attribute("bodyText", .stringAttributeType, optional: true),
+            attribute("isReminder", .booleanAttributeType),
+            attribute("reminderHour", .integer16AttributeType),
+            attribute("reminderMinute", .integer16AttributeType),
+            attribute("createdAt", .dateAttributeType),
             attribute("updatedAt", .dateAttributeType),
         ]
         return entity

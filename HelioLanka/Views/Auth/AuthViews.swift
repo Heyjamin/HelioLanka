@@ -43,7 +43,11 @@ extension View {
     func helioField() -> some View {
         self
             .padding(12)
-            .background(Color.white.opacity(0.85), in: RoundedRectangle(cornerRadius: HelioTheme.fieldRadius))
+            .background(HelioTheme.surface, in: RoundedRectangle(cornerRadius: HelioTheme.fieldRadius, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: HelioTheme.fieldRadius, style: .continuous)
+                    .strokeBorder(HelioTheme.hairline, lineWidth: 1)
+            )
     }
 }
 
@@ -82,7 +86,7 @@ struct LoginView: View {
                     if let err = vm.errorMessage {
                         Text(err)
                             .font(.footnote)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(HelioTheme.danger)
                     }
                     
                     Button {
@@ -94,13 +98,20 @@ struct LoginView: View {
                             Text("Continue")
                         }
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(HelioTheme.ocean)
+                    .buttonStyle(PrimaryButtonStyle())
                     .disabled(vm.isBusy)
                 }
                 .padding(HelioTheme.cardPadding)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.white.opacity(0.72), in: RoundedRectangle(cornerRadius: HelioTheme.cardRadius))
+                .background {
+                    RoundedRectangle(cornerRadius: HelioTheme.cardRadius, style: .continuous)
+                        .fill(HelioTheme.surface)
+                        .shadow(color: HelioTheme.cardShadow, radius: 16, y: 8)
+                }
+                .overlay(
+                    RoundedRectangle(cornerRadius: HelioTheme.cardRadius, style: .continuous)
+                        .strokeBorder(HelioTheme.hairline, lineWidth: 1)
+                )
                 
                 Button ("Create customer account"){
                     showRegister = true
@@ -149,7 +160,7 @@ struct RegisterView: View {
                     HelioPasswordField(text: $vm.password)
                     
                     if let err = vm.errorMessage {
-                        Text(err).font(.footnote).foregroundStyle(.red)
+                        Text(err).font(.footnote).foregroundStyle(HelioTheme.danger)
                     }
                     if let ok = vm.successMessage {
                         Text(ok).font(.footnote).foregroundStyle(HelioTheme.leaf)
@@ -160,8 +171,7 @@ struct RegisterView: View {
                     } label: {
                         if vm.isBusy { ProgressView() } else {Text("Register") }
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(HelioTheme.navy)
+                    .buttonStyle(PrimaryButtonStyle())
                     .disabled(vm.isBusy)
                 }
                 .padding(HelioTheme.screenPadding)
@@ -209,7 +219,7 @@ struct OtpView : View {
                     }
                 
                 if let err = vm.errorMessage {
-                    Text(err).font(.footnote).foregroundStyle(.red)
+                    Text(err).font(.footnote).foregroundStyle(HelioTheme.danger)
                 }
                 
                 Button {
@@ -219,8 +229,7 @@ struct OtpView : View {
                         Text ("Verify")
                     }
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(HelioTheme.leaf)
+                .buttonStyle(PrimaryButtonStyle())
                 .disabled(vm.isBusy)
                 
                 Button ("Resend code"){

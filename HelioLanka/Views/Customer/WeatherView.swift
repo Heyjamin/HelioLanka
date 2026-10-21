@@ -40,7 +40,7 @@ struct WeatherView: View {
                             HStack(spacing: 16){
                                 Image(systemName: weatherIcon(cloud: today.avgCloud, rain: today.rainMm))
                                     .font(.system(size: 40))
-                                    .foregroundStyle(HelioTheme.gold)
+                                    .foregroundStyle(HelioTheme.brandTeal)
                                 VStack(alignment: .leading, spacing: 4){
                                     Text(dayTitle(today.day))
                                         .font(.caption.weight(.semibold))
@@ -138,7 +138,7 @@ struct WeatherView: View {
                     if let errorMessage = vm.errorMessage{
                         Text(errorMessage)
                             .font(.footnote)
-                            .foregroundStyle(.red)
+                            .foregroundStyle(HelioTheme.danger)
                     }
                 }
                 .padding(HelioTheme.screenPadding)
@@ -181,9 +181,14 @@ private struct WeatherCard<Content: View>:View {
         }
         .padding(HelioTheme.cardPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
+        .background{
             RoundedRectangle(cornerRadius: HelioTheme.cardRadius, style: .continuous)
-                .fill(.white.opacity(0.72))
-        )
+                .fill(HelioTheme.surface)
+                .shadow(color: HelioTheme.cardShadow, radius: 16, y:8)
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: HelioTheme.cardRadius, style: .continuous)
+                .strokeBorder(HelioTheme.hairline, lineWidth: 1)
+        }
     }
 }

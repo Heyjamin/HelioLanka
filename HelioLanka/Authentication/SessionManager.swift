@@ -35,6 +35,9 @@ final class SessionManager{
     let dailyStore: DailyGenerationStore
     let weather: WeatherService
     let forecast: SolarForecastModel
+    let noteStore: CalendarNoteStore
+    let notifications: NotificationService
+    let calendar: CalendarService
     
     init() {
         let client = APIClient()
@@ -45,6 +48,9 @@ final class SessionManager{
         self.dailyStore = DailyGenerationStore()
         self.weather = WeatherService(client: client)
         self.forecast = SolarForecastModel()
+        self.noteStore = CalendarNoteStore()
+        self.notifications = NotificationService()
+        self.calendar = CalendarService()
     }
     
     func bootstrap() async {
@@ -60,6 +66,13 @@ final class SessionManager{
             try? await auth.logout()
             phase = .unauthenticated
         }
+        
+        let prefs = AppPreferences.shared
+        await notifications.applyDailySummary(
+            enabled: prefs.notificationsEnabled && prefs.dailySummaryEnabled,
+            hour: prefs.dailySummaryHour,
+            minute: prefs.dailySummaryMinute
+        )
     }
     
     func apply(user: UserMe){
@@ -74,9 +87,12 @@ final class SessionManager{
         }
     }
     
+    
     func beginOtp(challenge: LoginChallenge, usernameHint: String){
         phase = .needsOtp(challenge: challenge, usernameHint: usernameHint)
     }
+    
+    
     
 //    func debugLogin() async {
 //        lastError = nil

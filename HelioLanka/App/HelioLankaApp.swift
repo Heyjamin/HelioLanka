@@ -15,7 +15,8 @@ struct HelioLankaApp: App {
         WindowGroup {
             ContentView()
                 .environment(session)
-                .task{
+                .preferredColorScheme(.dark)
+                .task {
                     await session.bootstrap()
                 }
         }

@@ -25,12 +25,7 @@ struct CustomerTabShell: View {
             EarnView(session: session)
             .tabItem{Label("Earn", systemImage: "banknote.fill")}
             
-            PlaceholderTab(
-                title: "Calendar",
-                systemImage: "calendar",
-                user: user,
-                session: session
-            )
+            CalendarView(session: session)
             .tabItem { Label("Calendar", systemImage:"calendar")}
             
             PlaceholderTab(
@@ -42,7 +37,7 @@ struct CustomerTabShell: View {
             )
             .tabItem { Label("Account", systemImage: "person.crop.circle")}
         }
-        .tint(HelioTheme.leaf)
+        .tint(HelioTheme.brandTeal)
     }
 }
 

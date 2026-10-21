@@ -10,9 +10,22 @@
 		7476833B307BAE5700461647 /* HelioLanka.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelioLanka.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		744BD6B030891F7400F5EE72 /* Exceptions for "HelioLanka" folder in "HelioLanka" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7476833A307BAE5700461647 /* HelioLanka */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7476833D307BAE5700461647 /* HelioLanka */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				744BD6B030891F7400F5EE72 /* Exceptions for "HelioLanka" folder in "HelioLanka" target */,
+			);
 			path = HelioLanka;
 			sourceTree = "<group>";
 		};
@@ -248,6 +261,9 @@
 				DEVELOPMENT_TEAM = F7TS3LK4S4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HelioLanka/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "HelioLanka adds all-day events for high-generation days only after you tap sync.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -281,6 +297,9 @@
 				DEVELOPMENT_TEAM = F7TS3LK4S4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HelioLanka/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "HelioLanka adds all-day events for high-generation days only after you tap sync.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
