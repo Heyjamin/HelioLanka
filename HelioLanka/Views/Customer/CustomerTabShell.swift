@@ -28,13 +28,7 @@ struct CustomerTabShell: View {
             CalendarView(session: session)
             .tabItem { Label("Calendar", systemImage:"calendar")}
             
-            PlaceholderTab(
-                title:"Account",
-                systemImage:"person.crop.circle",
-                user: user,
-                session: session,
-                showsSignOut: true
-            )
+            AccountView(user: user, session: session)
             .tabItem { Label("Account", systemImage: "person.crop.circle")}
         }
         .tint(HelioTheme.brandTeal)

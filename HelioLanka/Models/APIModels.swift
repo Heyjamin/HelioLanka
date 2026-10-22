@@ -144,6 +144,38 @@ struct PageResult<T: Decodable>: Decodable{
     let count: Int?
 }
 
+struct CustomerProfile: Decodable {
+    let nickname: String?
+    let nicknamePublic: Bool
+    let profileImageUrl: String?
+    let meterId: String?
+    let accountNumber: String?
+}
+
+struct UpdateProfileBody: Encodable {
+    let nickname: String?
+    let nicknamePublic: Bool?
+}
+
+struct LinkAccountBody: Encodable {
+    let accountNumber: String
+}
+
+struct LeaderboardEntry: Decodable, Identifiable {
+    var id: String { "\(rank)-\(meterId)" }
+    let rank: Int
+    let displayName: String
+    let meterId: String
+    let exportEnergyKwh: Double
+    let estimatedEarningsLkr: Double?
+    let period: String?
+}
+
+struct LeaderboardResponse: Decodable {
+    let period: String?
+    let entries: [LeaderboardEntry]
+}
+
 struct WeatherPoint: Decodable {
     let timeUtc: Date
     let temperatureC: Double?

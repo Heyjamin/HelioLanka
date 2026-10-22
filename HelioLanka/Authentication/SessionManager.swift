@@ -38,6 +38,9 @@ final class SessionManager{
     let noteStore: CalendarNoteStore
     let notifications: NotificationService
     let calendar: CalendarService
+    let profile: ProfileService
+    let leaderboard: LeaderboardService
+
     
     init() {
         let client = APIClient()
@@ -51,6 +54,8 @@ final class SessionManager{
         self.noteStore = CalendarNoteStore()
         self.notifications = NotificationService()
         self.calendar = CalendarService()
+        self.profile = ProfileService(client: client)
+        self.leaderboard = LeaderboardService(client: client)
     }
     
     func bootstrap() async {

@@ -69,6 +69,54 @@ actor ReadingService {
     }
 }
 
+actor ProfileService {
+    private let client: APIClient
+
+    init(client: APIClient) {
+        self.client = client
+    }
+
+    func get() async throws -> CustomerProfile {
+        try await client.request("/api/v1/customers/me/profile")
+    }
+
+    func update(_ body: UpdateProfileBody) async throws -> CustomerProfile {
+        try await client.request(
+            "/api/v1/customers/me/profile",
+            method: .patch,
+            body: body
+        )
+    }
+
+    func linkAccount(_ accountNumber: String) async throws -> UserMe {
+        try await client.request(
+            "/api/v1/auth/link-account",
+            method: .post,
+            body: LinkAccountBody(accountNumber: accountNumber)
+        )
+    }
+}
+
+actor LeaderboardService {
+    private let client: APIClient
+
+    init(client: APIClient) {
+        self.client = client
+    }
+
+    func fetch(period: String) async throws -> [LeaderboardEntry] {
+        let response: LeaderboardResponse = try await client.request(
+            "/api/v1/leaderboard",
+            auth: false,
+            query: [
+                URLQueryItem(name: "period", value: period),
+                URLQueryItem(name: "limit", value: "50")
+            ]
+        )
+        return response.entries
+    }
+}
+
 actor WeatherService{
     private let client: APIClient
     
