@@ -100,6 +100,18 @@ struct LoginView: View {
                     }
                     .buttonStyle(PrimaryButtonStyle())
                     .disabled(vm.isBusy)
+                    
+                    if vm.biometricAvailable {
+                        Button {
+                            Task { await vm.submitWithBiometrics() }
+                        } label: {
+                            Label(vm.biometricKind.buttonTitle, systemImage: vm.biometricKind.systemImage)
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(HelioTheme.navy)
+                        .disabled(vm.isBusy)
+                    }
+
                 }
                 .padding(HelioTheme.cardPadding)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -123,6 +135,7 @@ struct LoginView: View {
         .sheet(isPresented: $showRegister){
             RegisterView(session:session)
         }
+        .onAppear { vm.refreshBiometricState() }
     }
 }
 

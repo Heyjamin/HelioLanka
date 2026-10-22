@@ -7,6 +7,7 @@
 
 import Foundation
 import Observation
+import WidgetKit
 
 @MainActor
 @Observable
@@ -19,6 +20,8 @@ final class AppPreferences {
         static let dailySummary = "helio.prefs.dailySummaryEnabled"
         static let dailyHour = "helio.prefs.dailySummaryHour"
         static let dailyMinute = "helio.prefs.dailySummaryMinute"
+        static let widget = "helio.prefs.widgetEnabled"
+        static let biometric = "helio.prefs.biometricLoginEnabled"
     }
 
     var notificationsEnabled: Bool {
@@ -40,6 +43,25 @@ final class AppPreferences {
     var dailySummaryMinute: Int {
         didSet { UserDefaults.standard.set(dailySummaryMinute, forKey: Keys.dailyMinute) }
     }
+    
+    var widgetEnabled: Bool {
+        didSet {
+            UserDefaults.standard.set(widgetEnabled, forKey: Keys.widget)
+            if widgetEnabled {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+        }
+    }
+
+    /// On/off only. The username and password stay in BiometricCredentialStore.
+    var biometricLoginEnabled: Bool {
+        didSet {
+            UserDefaults.standard.set(biometricLoginEnabled, forKey: Keys.biometric)
+            if !biometricLoginEnabled {
+                BiometricCredentialStore.clear()
+            }
+        }
+    }
 
     private init() {
         let defaults = UserDefaults.standard
@@ -48,5 +70,8 @@ final class AppPreferences {
         dailySummaryEnabled = defaults.object(forKey: Keys.dailySummary) as? Bool ?? false
         dailySummaryHour = defaults.object(forKey: Keys.dailyHour) as? Int ?? 18
         dailySummaryMinute = defaults.object(forKey: Keys.dailyMinute) as? Int ?? 0
+        widgetEnabled = defaults.object(forKey: Keys.widget) as? Bool ?? true
+        biometricLoginEnabled = defaults.object(forKey: Keys.biometric) as? Bool ?? false
+
     }
 }

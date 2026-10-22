@@ -51,6 +51,13 @@ final class HomeViewModel {
             async let rows = session.readings.latest(meterId: meter)
             composite = try await site
             recent = try await rows
+            WidgetPublisher.publish(
+                meterId: meter,
+                installationName: composite?.installation.installationName ?? "",
+                todayExportKwh: todayExportKwh,
+                tomorrowForecastKwh: nil
+            )
+
         } catch {
             errorMessage = error.localizedDescription
         }

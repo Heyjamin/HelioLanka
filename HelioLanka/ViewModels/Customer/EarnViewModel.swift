@@ -107,6 +107,12 @@ final class EarnViewModel {
                 ),
                 days: 30
             )
+            WidgetPublisher.publish(
+                meterId: meter,
+                installationName: composite.installation.installationName,
+                todayExportKwh: nil,
+                tomorrowForecastKwh: forecastDays.first?.predictedKwh
+            )
         }catch{
             errorMessage = error.localizedDescription
         }

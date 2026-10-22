@@ -11,25 +11,40 @@ import SwiftUI
 struct ContentView: View {
     @Environment(SessionManager.self) private var session
     
-    var body: some View{
-        ZStack{
+    var body: some View {
+        @Bindable var session = session
+        let biometricLabel = BiometricAuthService.kind.settingsLabel
+
+        ZStack {
             HelioBackground()
-            switch session.phase{
+            switch session.phase {
             case .launching:
-                ProgressView("Starting...")
+                ProgressView("Starting…")
             case .unauthenticated:
                 LoginView(session: session)
             case .needsOtp(let challenge, _):
                 OtpView(session: session, challenge: challenge)
-//            case .customer(let user):
-//                signedIn(user)
             case .customer(let user):
                 CustomerTabShell(user: user, session: session)
             case .staffBlocked(let user):
                 staffBlocked(user)
             }
         }
+        .alert(
+            "Enable \(biometricLabel)?",
+            isPresented: $session.showBiometricOffer
+        ) {
+            Button("Enable \(biometricLabel)") {
+                Task { await session.enableBiometricLogin() }
+            }
+            Button("Not now", role: .cancel) {
+                session.declineBiometricOffer()
+            }
+        } message: {
+            Text("Next time you can use \(biometricLabel) instead of typing your password. Not now leaves password sign-in as it is. You can accept this only after another sign-in.")
+        }
     }
+
     
 //    private func signedIn(_ user: UserMe) -> some View {
 //        VStack(alignment: .leading, spacing: 12){

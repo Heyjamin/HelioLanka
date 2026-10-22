@@ -21,6 +21,10 @@ final class SessionManager{
     
     private(set) var phase: Phase = .launching
     var selectedMeterId: String = ""
+    /// Held only until the Face ID offer is answered. Never written to UserDefaults.
+    var pendingLoginUsername: String?
+    var pendingLoginPassword: String?
+    var showBiometricOffer = false
     var lastError: String?
     
     //    Temporary debug fields for Phase 03 (replaced by proper forms in Phase 04).
@@ -64,9 +68,21 @@ final class SessionManager{
             phase = .unauthenticated
             return
         }
+        
+        if AppPreferences.shared.biometricLoginEnabled, BiometricAuthService.isAvailable {
+            do {
+                try await BiometricAuthService.authenticate(
+                    reason: "Unlock HelioLanka with \(BiometricAuthService.kind.settingsLabel)"
+                )
+            } catch {
+                phase = .unauthenticated
+                return
+            }
+        }
+
         do {
             let user = try await auth.me()
-            apply(user:user)
+            apply(user: user, offerBiometrics: false)
         }catch {
             try? await auth.logout()
             phase = .unauthenticated
@@ -80,19 +96,61 @@ final class SessionManager{
         )
     }
     
-    func apply(user: UserMe){
+    func apply(user: UserMe, offerBiometrics: Bool = true) {
         if user.isCustomer {
             let meters = user.allMeters
-            if selectedMeterId.isEmpty || !meters.contains(where: { $0.meterId == selectedMeterId}){
+            if selectedMeterId.isEmpty || !meters.contains(where: { $0.meterId == selectedMeterId }) {
                 selectedMeterId = meters.first?.meterId ?? user.linkedMeterId ?? ""
             }
             phase = .customer(user)
-        }else{
+            if offerBiometrics,
+               !AppPreferences.shared.biometricLoginEnabled,
+               BiometricAuthService.isAvailable,
+               pendingLoginUsername != nil,
+               pendingLoginPassword != nil {
+                showBiometricOffer = true
+            } else {
+                clearPendingCredentials()
+            }
+        } else {
+            clearPendingCredentials()
             phase = .staffBlocked(user)
         }
     }
-    
-    
+
+    func rememberPendingLogin(username: String, password: String) {
+        pendingLoginUsername = username.trimmingCharacters(in: .whitespacesAndNewlines)
+        pendingLoginPassword = password
+    }
+
+    func enableBiometricLogin() async {
+        guard let user = pendingLoginUsername, let pass = pendingLoginPassword else {
+            showBiometricOffer = false
+            return
+        }
+        do {
+            try await BiometricAuthService.authenticate(
+                reason: "Enable \(BiometricAuthService.kind.settingsLabel) for HelioLanka"
+            )
+            BiometricCredentialStore.save(username: user, password: pass)
+            AppPreferences.shared.biometricLoginEnabled = true
+            clearPendingCredentials()
+            showBiometricOffer = false
+        } catch {
+            showBiometricOffer = true
+        }
+    }
+
+    func declineBiometricOffer() {
+        clearPendingCredentials()
+        showBiometricOffer = false
+    }
+
+    func clearPendingCredentials() {
+        pendingLoginUsername = nil
+        pendingLoginPassword = nil
+    }
+
     func beginOtp(challenge: LoginChallenge, usernameHint: String){
         phase = .needsOtp(challenge: challenge, usernameHint: usernameHint)
     }
@@ -134,6 +192,8 @@ final class SessionManager{
         try? await auth.logout()
         selectedMeterId = ""
         // debugOtp = ""
+        clearPendingCredentials()
+        showBiometricOffer = false
         phase = .unauthenticated
     }
     

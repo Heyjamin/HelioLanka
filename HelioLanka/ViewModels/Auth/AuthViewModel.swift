@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import LocalAuthentication
 import Observation
+
 
 @MainActor
 @Observable
@@ -15,32 +17,89 @@ final class LoginViewModel {
     var password = ""
     var isBusy = false
     var errorMessage: String?
+    var biometricAvailable = false
+    var biometricKind = BiometricAuthService.BiometricKind.none
     
     private let session: SessionManager
     
     init (session: SessionManager) {
         self.session = session
+        refreshBiometricState()
     }
-    
+  
     func submit() async {
         errorMessage = nil
         let user = usernameOrEmail.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !user.isEmpty, !password.isEmpty else{
+        guard !user.isEmpty, !password.isEmpty else {
             errorMessage = "Enter your username and password."
             return
         }
         isBusy = true
         defer { isBusy = false }
+        session.rememberPendingLogin(username: user, password: password)
         do {
             let challenge = try await session.auth.login(
                 usernameOrEmail: user,
                 password: password
             )
             session.beginOtp(challenge: challenge, usernameHint: user)
-        }catch{
+        } catch {
+            session.clearPendingCredentials()
             errorMessage = error.localizedDescription
         }
     }
+
+    func refreshBiometricState() {
+        biometricKind = BiometricAuthService.kind
+        biometricAvailable = AppPreferences.shared.biometricLoginEnabled
+            && biometricKind != .none
+            && (BiometricCredentialStore.load() != nil || TokenStore.shared.load() != nil)
+    }
+
+    /// Unlock a saved session, or start password login with the Keychain credential.
+    /// A cleared session still needs the emailed OTP.
+    func submitWithBiometrics() async {
+        errorMessage = nil
+        isBusy = true
+        defer {
+            isBusy = false
+            refreshBiometricState()
+        }
+        do {
+            try await BiometricAuthService.authenticate(
+                reason: "Sign in to HelioLanka with \(biometricKind.settingsLabel)"
+            )
+            if TokenStore.shared.load() != nil {
+                let user = try await session.auth.me()
+                session.apply(user: user, offerBiometrics: false)
+                return
+            }
+            guard let creds = BiometricCredentialStore.load() else {
+                errorMessage = "Sign in with your username and password once, then enable \(biometricKind.settingsLabel)."
+                AppPreferences.shared.biometricLoginEnabled = false
+                return
+            }
+            usernameOrEmail = creds.username
+            password = creds.password
+            session.rememberPendingLogin(username: creds.username, password: creds.password)
+            let challenge = try await session.auth.login(
+                usernameOrEmail: creds.username,
+                password: creds.password
+            )
+            session.beginOtp(challenge: challenge, usernameHint: creds.username)
+        } catch {
+            errorMessage = friendlyBiometricError(error)
+        }
+    }
+
+    private func friendlyBiometricError(_ error: Error) -> String {
+        let ns = error as NSError
+        if ns.domain == "com.apple.LocalAuthentication", ns.code == LAError.userCancel.rawValue {
+            return "\(biometricKind.settingsLabel) cancelled. Use your password."
+        }
+        return error.localizedDescription
+    }
+
 }
 
 @MainActor

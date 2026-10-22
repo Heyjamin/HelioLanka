@@ -46,7 +46,7 @@ struct AccountView: View {
                         } label: {
                             accountRow("Leaderboard", "list.number", "Public monthly export")
                         }
-
+                        AccountSecurityCard()
                         Button("Sign out") {
                             Task { await session.signOut() }
                         }
@@ -327,6 +327,84 @@ struct LeaderboardView: View {
         .task { await vm.load() }
     }
 }
+
+private struct AccountSecurityCard: View {
+    @Bindable private var prefs = AppPreferences.shared
+    @State private var hint: String?
+    @State private var hintIsError = false
+
+    var body: some View {
+        let label = BiometricAuthService.kind.settingsLabel
+        AccountCard {
+            Text("Sign-in and widget")
+                .font(.headline)
+                .foregroundStyle(HelioTheme.navy)
+            Text("Face ID stores a password in the Keychain only after a successful prompt. The widget reads a snapshot, not the API.")
+                .font(.caption)
+                .foregroundStyle(HelioTheme.inkMuted)
+
+            Toggle("Sign in with \(label)", isOn: Binding(
+                get: { prefs.biometricLoginEnabled },
+                set: { turnedOn in
+                    Task { await setBiometric(turnedOn, label: label) }
+                }
+            ))
+            .tint(HelioTheme.leaf)
+            .foregroundStyle(HelioTheme.navy)
+
+            Toggle("Home Screen widget", isOn: $prefs.widgetEnabled)
+                .tint(HelioTheme.leaf)
+                .foregroundStyle(HelioTheme.navy)
+
+            if prefs.widgetEnabled {
+                Button("Reload widget") {
+                    WidgetCenterBridge.reload()
+                    hint = "Widget reload requested."
+                    hintIsError = false
+                }
+                .buttonStyle(.bordered)
+                .tint(HelioTheme.navy)
+            }
+
+            if let hint {
+                Text(hint)
+                    .font(.footnote)
+                    .foregroundStyle(hintIsError ? HelioTheme.danger : HelioTheme.leaf)
+            }
+        }
+    }
+
+    private func setBiometric(_ turnedOn: Bool, label: String) async {
+        if !turnedOn {
+            prefs.biometricLoginEnabled = false
+            hint = "\(label) is off. The saved password was removed."
+            hintIsError = false
+            return
+        }
+        guard BiometricAuthService.isAvailable else {
+            hint = "Enroll \(label) on this device first. Features → Face ID → Enrolled."
+            hintIsError = true
+            return
+        }
+        guard BiometricCredentialStore.load() != nil else {
+            hint = "Sign out, sign in with your username and password, enter the OTP, and accept the prompt."
+            hintIsError = true
+            return
+        }
+        do {
+            try await BiometricAuthService.authenticate(
+                reason: "Enable \(label) for HelioLanka"
+            )
+            prefs.biometricLoginEnabled = true
+            hint = "\(label) is on."
+            hintIsError = false
+        } catch {
+            hint = "\(label) was not enabled. Password sign-in still works."
+            hintIsError = true
+        }
+    }
+}
+
 
 private struct AccountCard<Content: View>: View {
     @ViewBuilder var content: Content
