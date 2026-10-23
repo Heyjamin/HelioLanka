@@ -23,6 +23,7 @@ struct CalendarView: View {
             HelioBackground()
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
+                    HelioBrandLockup(height: 36, showsTagline: false)
                     Text("Calendar")
                         .font(.system(size: 28, weight: .bold, design: .rounded))
                         .foregroundStyle(HelioTheme.navy)

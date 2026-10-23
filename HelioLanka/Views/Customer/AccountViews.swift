@@ -18,6 +18,7 @@ struct AccountView: View {
                 HelioBackground()
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
+                        HelioBrandLockup(height: 36, showsTagline: false)
                         Text("Account")
                             .font(.system(size: 28, weight: .bold, design: .rounded))
                             .foregroundStyle(HelioTheme.navy)
@@ -99,6 +100,7 @@ struct ProfileView: View {
             HelioBackground()
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
+                    HelioBrandLockup(height: 36, showsTagline: false)
                     Text("Profile")
                         .font(.system(size: 28, weight: .bold, design: .rounded))
                         .foregroundStyle(HelioTheme.navy)
@@ -208,6 +210,11 @@ struct SitesMapView: View {
             }
         }
         .navigationTitle("Map")
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                HelioBrandLockup(height: 28, showsTagline: false)
+            }
+        }
         .navigationBarTitleDisplayMode(.inline)
         .task {
             var loaded: [InstallationComposite] = []
@@ -252,6 +259,7 @@ struct LeaderboardView: View {
             HelioBackground()
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
+                    HelioBrandLockup(height: 36, showsTagline: false)
                     Text("Leaderboard")
                         .font(.system(size: 28, weight: .bold, design: .rounded))
                         .foregroundStyle(HelioTheme.navy)

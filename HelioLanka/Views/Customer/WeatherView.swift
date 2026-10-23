@@ -22,6 +22,7 @@ struct WeatherView: View {
             HelioBackground()
             ScrollView{
                 VStack(alignment: .leading, spacing: 16){
+                    HelioBrandLockup(height: 36, showsTagline: false)
                     HStack{
                         Text("Weather")
                             .font(.system(size: 28, weight: .bold, design: .rounded))

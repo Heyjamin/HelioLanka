@@ -49,18 +49,17 @@
 			);
 			target = 7476833A307BAE5700461647 /* HelioLanka */;
 		};
-		74BA2B5B308A7EAE008C38E0 /* Exceptions for "HelioLanka" folder in "HelioLankaWidgetExtension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Shared/WidgetSnapshot.swift,
-			);
-			target = 74BA2B49308A7EAD008C38E0 /* HelioLankaWidgetExtension */;
-		};
 		74BA2B5A308A7EAE008C38E0 /* Exceptions for "HelioLankaWidget" folder in "HelioLankaWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-				HelioLankaWidget.entitlements,
+			);
+			target = 74BA2B49308A7EAD008C38E0 /* HelioLankaWidgetExtension */;
+		};
+		74BA2B5B308A7EAE008C38E0 /* Exceptions for "HelioLanka" folder in "HelioLankaWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Shared/WidgetSnapshot.swift,
 			);
 			target = 74BA2B49308A7EAD008C38E0 /* HelioLankaWidgetExtension */;
 		};
@@ -450,6 +449,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = HelioLankaWidget/HelioLankaWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F7TS3LK4S4;
@@ -463,7 +463,6 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				CODE_SIGN_ENTITLEMENTS = HelioLankaWidget/HelioLankaWidget.entitlements;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HelioLanka.HelioLankaWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -484,6 +483,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = HelioLankaWidget/HelioLankaWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F7TS3LK4S4;
@@ -497,7 +497,6 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				CODE_SIGN_ENTITLEMENTS = HelioLankaWidget/HelioLankaWidget.entitlements;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HelioLanka.HelioLankaWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";

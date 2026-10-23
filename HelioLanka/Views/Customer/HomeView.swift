@@ -61,6 +61,7 @@ struct HomeView: View {
                 VStack(alignment: .leading, spacing: 16){
                     HStack{
                         VStack(alignment: .leading, spacing: 4){
+                            HelioBrandLockup(height: 36, showsTagline: false)
                             Text("Home")
                                 .font(.system(size: 28, weight: .bold, design: .rounded))
                                 .foregroundStyle(HelioTheme.navy)

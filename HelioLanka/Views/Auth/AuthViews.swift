@@ -64,11 +64,15 @@ struct LoginView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20){
-                Text("HelioLanka")
-                    .font(.system(size:34, weight: .bold, design: .rounded))
-                    .foregroundStyle(HelioTheme.navy)
+                HelioBrandLockup(height: 56)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 28)
+
                 Text("Your rooftop solar, elevated.")
+                    .font(.subheadline)
                     .foregroundStyle(HelioTheme.inkMuted)
+                    .frame(maxWidth: .infinity)
+                    .multilineTextAlignment(.center)
                 
                 VStack(alignment: .leading, spacing: 12){
                     Text("Sign in")
@@ -151,6 +155,9 @@ struct RegisterView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 12){
+                    HelioBrandLockup(height: 44)
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 8)
                     TextField("10-digit account number", text: $vm.accountNumber)
                         .keyboardType(.numberPad)
                         .helioField()
@@ -191,6 +198,7 @@ struct RegisterView: View {
             }
             .background(HelioBackground())
             .navigationTitle("Create account")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar{
                 ToolbarItem(placement: .cancellationAction){
                     Button("Close"){
@@ -214,22 +222,22 @@ struct OtpView : View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16){
+                HelioBrandLockup(height: 56)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 28)
+
                 Text("Enter your code")
-                    .font(.system(size:28, weight: .bold, design: .rounded))
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundStyle(HelioTheme.navy)
-                
+                    .frame(maxWidth: .infinity)
+
                 Text(vm.infoMessage)
+                    .font(.subheadline)
                     .foregroundStyle(HelioTheme.inkMuted)
-                
-                TextField("6-digit code", text: $vm.otp)
-                    .keyboardType(.numberPad)
-                    .textContentType(.oneTimeCode)
-                    .font(.title2.monospacedDigit())
-                    .helioField()
-                    .onChange(of: vm.otp) { _, newValue in
-                        let digits = newValue.filter(\.isNumber)
-                        vm.otp = String(digits.prefix(6))
-                    }
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+
+                OtpCodeBoxes(code: $vm.otp)
                 
                 if let err = vm.errorMessage {
                     Text(err).font(.footnote).foregroundStyle(HelioTheme.danger)
@@ -259,3 +267,52 @@ struct OtpView : View {
         }
     }
 }
+
+struct OtpCodeBoxes: View {
+    @Binding var code: String
+    @FocusState private var isFocused: Bool
+
+    var body: some View {
+        ZStack {
+            TextField("", text: $code)
+                .keyboardType(.numberPad)
+                .textContentType(.oneTimeCode)
+                .focused($isFocused)
+                .opacity(0.02)
+                .frame(width: 1, height: 1)
+                .onChange(of: code) { _, newValue in
+                    let digits = newValue.filter(\.isNumber)
+                    code = String(digits.prefix(6))
+                }
+
+            HStack(spacing: 8) {
+                ForEach(0..<6, id: \.self) { index in
+                    box(at: index)
+                }
+            }
+            .contentShape(Rectangle())
+            .onTapGesture { isFocused = true }
+        }
+        .onAppear { isFocused = true }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("One-time code, \(code.count) of 6 digits")
+    }
+
+    private func box(at index: Int) -> some View {
+        let digits = Array(code)
+        let glyph = index < digits.count ? String(digits[index]) : ""
+        let isActive = isFocused && index == min(code.count, 5)
+
+        return Text(glyph)
+            .font(.title2.monospacedDigit().weight(.bold))
+            .foregroundStyle(HelioTheme.navy)
+            .frame(maxWidth: .infinity)
+            .frame(height: 56)
+            .background(HelioTheme.surface, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .strokeBorder(isActive ? HelioTheme.brandTeal : HelioTheme.hairline, lineWidth: isActive ? 2 : 1)
+            }
+    }
+}
+
