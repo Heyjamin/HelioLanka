@@ -6,19 +6,26 @@
 	<dict>
 		<key>HelioLanka.xcscheme_^#shared#^_</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
 		<key>HelioLankaWidgetExtension.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>isShown</key>
-			<true/>
+			<false/>
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>743E14B1308BBF4C00083821</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>7476833A307BAE5700461647</key>
 		<dict>
 			<key>primary</key>

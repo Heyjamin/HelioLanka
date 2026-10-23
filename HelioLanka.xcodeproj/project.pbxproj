@@ -13,6 +13,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		743E14B6308BBF4C00083821 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 74768333307BAE5700461647 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7476833A307BAE5700461647;
+			remoteInfo = HelioLanka;
+		};
 		74BA2B55308A7EAE008C38E0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 74768333307BAE5700461647 /* Project object */;
@@ -35,6 +42,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		743E14B2308BBF4C00083821 /* HelioLankaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HelioLankaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7476833B307BAE5700461647 /* HelioLanka.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelioLanka.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74BA2B27308A78A8008C38E0 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		74BA2B29308A78A8008C38E0 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -66,6 +74,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		743E14B3308BBF4C00083821 /* HelioLankaTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = HelioLankaTests;
+			sourceTree = "<group>";
+		};
 		7476833D307BAE5700461647 /* HelioLanka */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -86,6 +99,11 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		743E14AF308BBF4C00083821 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
 		74768338307BAE5700461647 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
@@ -106,6 +124,7 @@
 			children = (
 				7476833D307BAE5700461647 /* HelioLanka */,
 				74BA2B4D308A7EAD008C38E0 /* HelioLankaWidget */,
+				743E14B3308BBF4C00083821 /* HelioLankaTests */,
 				74BA2B26308A78A8008C38E0 /* Frameworks */,
 				7476833C307BAE5700461647 /* Products */,
 			);
@@ -116,6 +135,7 @@
 			children = (
 				7476833B307BAE5700461647 /* HelioLanka.app */,
 				74BA2B4A308A7EAD008C38E0 /* HelioLankaWidgetExtension.appex */,
+				743E14B2308BBF4C00083821 /* HelioLankaTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -132,6 +152,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		743E14B1308BBF4C00083821 /* HelioLankaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 743E14B8308BBF4C00083821 /* Build configuration list for PBXNativeTarget "HelioLankaTests" */;
+			buildPhases = (
+				743E14AE308BBF4C00083821 /* Sources */,
+				743E14AF308BBF4C00083821 /* Frameworks */,
+				743E14B0308BBF4C00083821 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				743E14B7308BBF4C00083821 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				743E14B3308BBF4C00083821 /* HelioLankaTests */,
+			);
+			name = HelioLankaTests;
+			productName = HelioLankaTests;
+			productReference = 743E14B2308BBF4C00083821 /* HelioLankaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		7476833A307BAE5700461647 /* HelioLanka */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 74768348307BAE5700461647 /* Build configuration list for PBXNativeTarget "HelioLanka" */;
@@ -182,6 +223,10 @@
 				LastSwiftUpdateCheck = 2710;
 				LastUpgradeCheck = 2710;
 				TargetAttributes = {
+					743E14B1308BBF4C00083821 = {
+						CreatedOnToolsVersion = 27.1;
+						TestTargetID = 7476833A307BAE5700461647;
+					};
 					7476833A307BAE5700461647 = {
 						CreatedOnToolsVersion = 27.0;
 					};
@@ -206,11 +251,17 @@
 			targets = (
 				7476833A307BAE5700461647 /* HelioLanka */,
 				74BA2B49308A7EAD008C38E0 /* HelioLankaWidgetExtension */,
+				743E14B1308BBF4C00083821 /* HelioLankaTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		743E14B0308BBF4C00083821 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
 		74768339307BAE5700461647 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
@@ -224,6 +275,11 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		743E14AE308BBF4C00083821 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 		74768337307BAE5700461647 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
@@ -237,6 +293,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		743E14B7308BBF4C00083821 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7476833A307BAE5700461647 /* HelioLanka */;
+			targetProxy = 743E14B6308BBF4C00083821 /* PBXContainerItemProxy */;
+		};
 		74BA2B56308A7EAE008C38E0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 74BA2B49308A7EAD008C38E0 /* HelioLankaWidgetExtension */;
@@ -245,6 +306,50 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		743E14B9308BBF4C00083821 /* Debug configuration for PBXNativeTarget "HelioLankaTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F7TS3LK4S4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.HelioLankaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelioLanka.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HelioLanka";
+			};
+			name = Debug;
+		};
+		743E14BA308BBF4C00083821 /* Release configuration for PBXNativeTarget "HelioLankaTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F7TS3LK4S4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.HelioLankaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HelioLanka.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HelioLanka";
+			};
+			name = Release;
+		};
 		74768346307BAE5700461647 /* Debug configuration for PBXProject "HelioLanka" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -515,6 +620,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		743E14B8308BBF4C00083821 /* Build configuration list for PBXNativeTarget "HelioLankaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				743E14B9308BBF4C00083821 /* Debug configuration for PBXNativeTarget "HelioLankaTests" */,
+				743E14BA308BBF4C00083821 /* Release configuration for PBXNativeTarget "HelioLankaTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
 		74768336307BAE5700461647 /* Build configuration list for PBXProject "HelioLanka" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
