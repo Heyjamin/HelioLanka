@@ -487,6 +487,7 @@
 				INFOPLIST_FILE = HelioLanka/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "HelioLanka adds all-day events for high-generation days only after you tap sync.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "HelioLanka uses Face ID to confirm it is you before reading the password saved in the Keychain.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -525,6 +526,7 @@
 				INFOPLIST_FILE = HelioLanka/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "HelioLanka adds all-day events for high-generation days only after you tap sync.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "HelioLanka uses Face ID to confirm it is you before reading the password saved in the Keychain.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
